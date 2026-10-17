@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>printokm | خدماتك الرقمية في مكان واحد</title>
+  <meta name="description" content="منصة جزائرية للخدمات الرقمية: سير ذاتية، فواتير، بحوث، وأدوات مكتبية.">
+  <style>
+    :root {
+      --main: #0f766e;
+      --dark: #134e4a;
+      --light: #f0fdfa;
+      --text: #1f2937;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background: #fff;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 5%;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--main); }
+    nav a {
+      margin-inline-start: 18px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 5%;
+      background: linear-gradient(135deg, var(--light), #ccfbf1);
+    }
+    .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); color: var(--dark); margin-bottom: 16px; }
+    .hero p { max-width: 640px; margin: 0 auto 28px; font-size: 1.1rem; }
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--main);
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .btn:hover { background: var(--dark); }
+    section { padding: 60px 5%; }
+    section h2 { text-align: center; margin-bottom: 36px; color: var(--dark); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+      background: #fff;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+    .card .icon { font-size: 2rem; margin-bottom: 10px; }
+    .card h3 { margin-bottom: 8px; color: var(--main); }
+    footer {
+      text-align: center;
+      padding: 28px 5%;
+      background: var(--dark);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">printokm</div>
+    <nav>
+      <a href="#services">الخدمات</a>
+      <a href="#contact">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>كل الخدمات الرقمية لمحلك في مكان واحد</h1>
+    <p>سير ذاتية، فواتير، بحوث، وأدوات مكتبية. أنجزها في دقائق من هاتفك.</p>
+    <a class="btn" href="#services">تصفّح الخدمات</a>
+  </div>
+
+  <section id="services">
+    <h2>خدماتنا</h2>
+    <div class="grid">
+      <div class="card"><div class="icon">📄</div><h3>السيرة الذاتية</h3><p>قوالب احترافية بالعربية والفرنسية والإنجليزية.</p></div>
+      <div class="card"><div class="icon">🧾</div><h3>الفواتير</h3><p>أنشئ فاتورة منظمة وجاهزة للطباعة.</p></div>
+      <div class="card"><div class="icon">📚</div><h3>بحوث مدرسية</h3><p>بحوث جاهزة لكل المستويات.</p></div>
+      <div class="card"><div class="icon">🛠️</div><h3>أدوات مكتبية</h3><p>QR، تحويل الصور وPDF، صور الهوية.</p></div>
+    </div>
+  </section>
+
+  <section id="contact" style="text-align:center; background:var(--light)">
+    <h2>تواصل معنا</h2>
+    <p style="margin-bottom:20px">عندك سؤال؟ راسلنا على واتساب.</p>
+    <a class="btn" href="https://wa.me/213XXXXXXXXX">واتساب</a>
+  </section>
+
+  <footer>© 2026 printokm. جميع الحقوق محفوظة.</footer>
+
+</body>
+</html>
