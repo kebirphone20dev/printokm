@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مولّد السيرة الذاتية | printokm</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; background: #f3f4f6; color: #1f2937; }
+    .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+    @media (max-width: 800px) { .wrap { grid-template-columns: 1fr; } }
+    .panel { background: #fff; border-radius: 12px; padding: 20px; }
+    h2 { color: #0f766e; margin-bottom: 14px; }
+    label { display: block; margin: 10px 0 4px; font-weight: 600; font-size: .9rem; }
+    input, textarea {
+      width: 100%; padding: 10px; border: 1px solid #d1d5db;
+      border-radius: 8px; font: inherit;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    .btn {
+      margin-top: 16px; padding: 12px 24px; background: #0f766e; color: #fff;
+      border: 0; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .btn:hover { background: #134e4a; }
+
+    /* معاينة السيرة الذاتية */
+    #cv { background: #fff; padding: 32px; min-height: 500px; border-radius: 12px; }
+    #cv h1 { font-size: 1.8rem; color: #134e4a; }
+    #cv .title { color: #0f766e; font-weight: 700; margin-bottom: 8px; }
+    #cv .contact { font-size: .9rem; color: #4b5563; margin-bottom: 16px; }
+    #cv h3 {
+      color: #0f766e; border-bottom: 2px solid #0f766e;
+      padding-bottom: 4px; margin: 18px 0 8px;
+    }
+    #cv p, #cv li { white-space: pre-line; line-height: 1.8; }
+
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .wrap { display: block; padding: 0; }
+      #cv { box-shadow: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="panel no-print">
+      <h2>معلوماتك</h2>
+
+      <label>الاسم الكامل</label>
+      <input id="name" placeholder="مثال: محمد بن أحمد">
+
+      <label>المسمى الوظيفي</label>
+      <input id="jobTitle" placeholder="مثال: محاسب">
+
+      <label>الهاتف</label>
+      <input id="phone" placeholder="0555 00 00 00">
+
+      <label>البريد الإلكتروني</label>
+      <input id="email" placeholder="name@example.com">
+
+      <label>العنوان</label>
+      <input id="address" placeholder="تلمسان، الجزائر">
+
+      <label>نبذة عنك</label>
+      <textarea id="about"></textarea>
+
+      <label>الخبرات (كل خبرة في سطر)</label>
+      <textarea id="exp"></textarea>
+
+      <label>التكوين والشهادات (كل واحدة في سطر)</label>
+      <textarea id="edu"></textarea>
+
+      <label>المهارات (كل مهارة في سطر)</label>
+      <textarea id="skills"></textarea>
+
+      <button class="btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+    </div>
+
+    <div id="cv">
+      <h1 id="o-name">اسمك هنا</h1>
+      <div class="title" id="o-title"></div>
+      <div class="contact" id="o-contact"></div>
+
+      <div id="s-about"><h3>نبذة</h3><p id="o-about"></p></div>
+      <div id="s-exp"><h3>الخبرات</h3><p id="o-exp"></p></div>
+      <div id="s-edu"><h3>التكوين</h3><p id="o-edu"></p></div>
+      <div id="s-skills"><h3>المهارات</h3><p id="o-skills"></p></div>
+    </div>
+
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    function render() {
+      $("o-name").textContent = $("name").value || "اسمك هنا";
+      $("o-title").textContent = $("jobTitle").value;
+
+      const contact = [$("phone").value, $("email").value, $("address").value]
+        .filter(Boolean).join("  •  ");
+      $("o-contact").textContent = contact;
+
+      [["about","about"],["exp","exp"],["edu","edu"],["skills","skills"]].forEach(([inp, out]) => {
+        const v = $(inp).value.trim();
+        $("o-" + out).textContent = v;
+        $("s-" + out).style.display = v ? "block" : "none";
+      });
+    }
+
+    document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", render));
+    render();
+  </script>
+</body>
+</html>
