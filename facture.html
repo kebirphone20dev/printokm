@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مولّد الفواتير | printokm</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; background: #f3f4f6; color: #1f2937; }
+    .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+    @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
+    .panel { background: #fff; border-radius: 12px; padding: 20px; }
+    h2 { color: #0f766e; margin-bottom: 12px; }
+    h4 { margin: 16px 0 6px; color: #134e4a; }
+    label { display: block; margin: 8px 0 3px; font-weight: 600; font-size: .85rem; }
+    input, select {
+      width: 100%; padding: 9px; border: 1px solid #d1d5db;
+      border-radius: 8px; font: inherit;
+    }
+    .row { display: grid; grid-template-columns: 3fr 1fr 1.4fr auto; gap: 6px; margin-bottom: 6px; }
+    .btn {
+      margin-top: 12px; padding: 11px 20px; background: #0f766e; color: #fff;
+      border: 0; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .btn.sec { background: #e5e7eb; color: #1f2937; }
+    .btn.del { margin: 0; padding: 0 12px; background: #fee2e2; color: #b91c1c; }
+
+    /* الفاتورة */
+    #inv { background: #fff; padding: 32px; border-radius: 12px; direction: ltr; text-align: left;
+           font-family: Arial, sans-serif; font-size: 14px; }
+    #inv h1 { font-size: 26px; color: #134e4a; margin-bottom: 4px; }
+    .top { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+    .box { flex: 1; font-size: 13px; line-height: 1.6; white-space: pre-line; }
+    .box b { display: block; color: #0f766e; margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { background: #0f766e; color: #fff; padding: 8px; text-align: left; }
+    td { padding: 8px; border-bottom: 1px solid #e5e7eb; }
+    .r { text-align: right; }
+    .tot { margin-top: 14px; margin-left: auto; width: 280px; }
+    .tot div { display: flex; justify-content: space-between; padding: 4px 0; }
+    .tot .big { font-weight: 800; font-size: 16px; border-top: 2px solid #134e4a; margin-top: 4px; padding-top: 8px; }
+    .words { margin-top: 16px; font-style: italic; }
+
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .wrap { display: block; padding: 0; }
+      #inv { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="panel no-print">
+    <h2>بيانات الفاتورة</h2>
+
+    <label>رقم الفاتورة</label>
+    <input id="num" value="001/2026">
+    <label>التاريخ</label>
+    <input id="date" type="date">
+
+    <h4>البائع (أنت)</h4>
+    <label>الاسم / الشركة</label><input id="sName">
+    <label>العنوان</label><input id="sAddr">
+    <label>RC</label><input id="sRc">
+    <label>NIF</label><input id="sNif">
+    <label>NIS</label><input id="sNis">
+    <label>A.I (رقم المادة)</label><input id="sAi">
+
+    <h4>الزبون</h4>
+    <label>الاسم</label><input id="cName">
+    <label>العنوان</label><input id="cAddr">
+    <label>NIF (اختياري)</label><input id="cNif">
+
+    <h4>المنتجات / الخدمات</h4>
+    <div id="items"></div>
+    <button class="btn sec" onclick="addRow()">+ إضافة سطر</button>
+
+    <label style="margin-top:14px">TVA</label>
+    <select id="tva">
+      <option value="0">0% (معفى)</option>
+      <option value="9">9%</option>
+      <option value="19" selected>19%</option>
+    </select>
+
+    <label>حقوق الطابع (Timbre) بالدينار، اتركه 0 إذا ما كانش</label>
+    <input id="timbre" type="number" min="0" value="0">
+
+    <button class="btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+  </div>
+
+  <div id="inv">
+    <div class="top">
+      <div><h1>FACTURE</h1><div>N° <span id="o-num"></span><br>Date : <span id="o-date"></span></div></div>
+    </div>
+    <div class="top">
+      <div class="box"><b>Vendeur</b><span id="o-seller"></span></div>
+      <div class="box"><b>Client</b><span id="o-client"></span></div>
+    </div>
+    <table>
+      <thead><tr><th>Désignation</th><th class="r">Qté</th><th class="r">P.U. HT</th><th class="r">Total HT</th></tr></thead>
+      <tbody id="o-rows"></tbody>
+    </table>
+    <div class="tot">
+      <div><span>Total HT</span><span id="o-ht"></span></div>
+      <div><span id="o-tvalabel">TVA</span><span id="o-tva"></span></div>
+      <div id="o-timbrerow"><span>Timbre</span><span id="o-timbre"></span></div>
+      <div class="big"><span>Total TTC</span><span id="o-ttc"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const fmt = n => n.toLocaleString("fr-FR", {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " DA";
+
+  $("date").valueAsDate = new Date();
+
+  function addRow(d = "", q = 1, p = 0) {
+    const r = document.createElement("div");
+    r.className = "row";
+    r.innerHTML = `
+      <input class="d" placeholder="الوصف" value="${d}">
+      <input class="q" type="number" min="0" value="${q}">
+      <input class="p" type="number" min="0" value="${p}">
+      <button class="btn del" onclick="this.parentElement.remove();render()">✕</button>`;
+    r.querySelectorAll("input").forEach(i => i.addEventListener("input", render));
+    $("items").appendChild(r);
+    render();
+  }
+
+  function esc(s) {
+    return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  function render() {
+    $("o-num").textContent = $("num").value;
+    $("o-date").textContent = $("date").value.split("-").reverse().join("/");
+
+    const seller = [$("sName").value, $("sAddr").value,
+      $("sRc").value && "RC : " + $("sRc").value,
+      $("sNif").value && "NIF : " + $("sNif").value,
+      $("sNis").value && "NIS : " + $("sNis").value,
+      $("sAi").value && "A.I : " + $("sAi").value].filter(Boolean).join("\n");
+    $("o-seller").textContent = seller;
+
+    $("o-client").textContent = [$("cName").value, $("cAddr").value,
+      $("cNif").value && "NIF : " + $("cNif").value].filter(Boolean).join("\n");
+
+    let ht = 0, html = "";
+    document.querySelectorAll("#items .row").forEach(r => {
+      const d = r.querySelector(".d").value;
+      const q = parseFloat(r.querySelector(".q").value) || 0;
+      const p = parseFloat(r.querySelector(".p").value) || 0;
+      const t = q * p;
+      ht += t;
+      if (d || t) html += `<tr><td>${esc(d)}</td><td class="r">${q}</td><td class="r">${fmt(p)}</td><td class="r">${fmt(t)}</td></tr>`;
+    });
+    $("o-rows").innerHTML = html;
+
+    const rate = parseFloat($("tva").value);
+    const tva = ht * rate / 100;
+    const timbre = parseFloat($("timbre").value) || 0;
+
+    $("o-ht").textContent = fmt(ht);
+    $("o-tvalabel").textContent = "TVA " + rate + "%";
+    $("o-tva").textContent = fmt(tva);
+    $("o-timbre").textContent = fmt(timbre);
+    $("o-timbrerow").style.display = timbre > 0 ? "flex" : "none";
+    $("o-ttc").textContent = fmt(ht + tva + timbre);
+  }
+
+  document.querySelectorAll("#num,#date,#sName,#sAddr,#sRc,#sNif,#sNis,#sAi,#cName,#cAddr,#cNif,#tva,#timbre")
+    .forEach(el => el.addEventListener("input", render));
+
+  addRow();
+</script>
+</body>
+</html>
